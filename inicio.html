@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FIRENET Games</title>
+  <style>
+    :root{
+      --preto-profundo:#050505;
+      --vermelho-fogo:#FF2A00;
+      --laranja-energia:#FF5A00;
+      --laranja-dourado:#FF8A00;
+      --branco-gelo:#F5F5F5;
+      --cinza-claro:#BFC3C9;
+      --cinza-medio:#707070;
+      --cinza-escuro:#151515;
+      --azul-neon:#00BFFF;
+      --azul-escuro:#003B66;
+      --grad-fire:linear-gradient(90deg,#FF2A00 0%,#FF5A00 50%,#FF8A00 100%);
+      --grad-dark:linear-gradient(180deg,#050505 0%,#151515 100%);
+      --grad-tech:linear-gradient(90deg,#FF2A00 0%,#00BFFF 100%);
+      --card-border:rgba(255,90,0,.15);
+      --card-shadow:rgba(255,42,0,.18);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;width:100%;min-height:100%;background:var(--preto-profundo);color:var(--branco-gelo);font-family:Impact,"Arial Black",Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;overflow-x:hidden}
+    body{
+      background:
+        radial-gradient(circle at 72% 16%,rgba(255,90,0,.22),transparent 25%),
+        radial-gradient(circle at 18% 36%,rgba(255,42,0,.16),transparent 28%),
+        radial-gradient(circle at 88% 72%,rgba(0,191,255,.10),transparent 26%),
+        var(--preto-profundo);
+    }
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(120deg,transparent 0 12%,rgba(255,42,0,.10) 12.2%,transparent 12.7%),linear-gradient(60deg,transparent 0 18%,rgba(0,191,255,.06) 18.2%,transparent 18.7%),radial-gradient(circle at 74% 34%,rgba(191,195,201,.16) 0 1px,transparent 1.5px);background-size:280px 180px,360px 220px,12px 12px;opacity:.65;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent)}
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(255,42,0,.18),transparent 8%,transparent 92%,rgba(255,90,0,.14));opacity:.7}
+
+    .layout{min-height:100dvh;display:block;position:relative;z-index:1}
+    .sidebar{display:none}.social{display:none}
+
+    main{width:min(1180px,96vw);margin:0 auto;padding:28px 20px 30px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:18px}.brand img{width:360px;max-width:42vw;filter:drop-shadow(0 0 24px rgba(255,90,0,.35))}.status{display:flex;align-items:center;gap:14px}.conn{border:1px solid rgba(0,191,255,.28);background:rgba(0,59,102,.14);padding:14px 22px;border-radius:18px;min-width:220px;color:var(--azul-neon);font-weight:1000;text-transform:uppercase;letter-spacing:.8px;box-shadow:0 0 28px rgba(0,191,255,.08)}.conn small{display:block;color:var(--laranja-energia);margin-top:4px}.client{border:1px solid rgba(255,90,0,.42);background:rgba(21,21,21,.8);color:var(--laranja-dourado);text-decoration:none;border-radius:16px;padding:17px 24px;font-weight:1000;text-transform:uppercase;box-shadow:0 0 24px rgba(255,42,0,.12)}
+
+    .hero{position:relative;margin-top:28px;display:flex;justify-content:center;align-items:center;text-align:center}.hero-kicker{display:inline-block;border:1px solid rgba(255,90,0,.45);border-radius:14px;color:var(--laranja-energia);padding:10px 22px;background:rgba(5,5,5,.62);font-size:20px;letter-spacing:2px;text-transform:uppercase}.hero h1{margin:22px 0 6px;font-size:clamp(54px,7vw,104px);line-height:.88;letter-spacing:1px;text-transform:uppercase;color:var(--branco-gelo);text-shadow:0 0 18px rgba(245,245,245,.14)}.hero h2{margin:0;color:var(--laranja-energia);font-size:clamp(22px,2.3vw,34px);text-transform:uppercase;letter-spacing:1px}.hero p{font-family:Inter,system-ui,sans-serif;color:var(--cinza-claro);font-weight:700;line-height:1.55;max-width:650px;margin:14px auto 0}.rocket-art{min-height:300px;border-radius:28px;background:radial-gradient(circle at 55% 48%,rgba(255,90,0,.36),transparent 34%),radial-gradient(circle at 55% 48%,rgba(0,191,255,.22),transparent 48%);display:grid;place-items:center;position:relative;overflow:hidden}.rocket-art::before{content:"🚀";font-size:180px;filter:drop-shadow(0 0 28px rgba(255,90,0,.55));transform:rotate(-18deg)}.rocket-art::after{content:"";position:absolute;inset:0;background:conic-gradient(from 120deg,transparent,rgba(255,90,0,.44),transparent,rgba(0,191,255,.20),transparent);opacity:.85;animation:spin 8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    .features{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(112,112,112,.28);background:rgba(21,21,21,.64);border-radius:18px;overflow:hidden;max-width:720px}.feature{padding:18px 20px;display:flex;gap:14px;align-items:center;border-right:1px solid rgba(112,112,112,.25)}.feature:last-child{border-right:0}.feature i{font-style:normal;color:var(--azul-neon);font-size:34px}.feature b{display:block;color:var(--branco-gelo);font-size:16px;text-transform:uppercase}.feature small{font-family:Inter,system-ui,sans-serif;color:var(--cinza-claro);font-size:12px;line-height:1.3}
+
+    .section-title{margin:38px 0 18px;text-align:center;display:flex;align-items:center;gap:16px;justify-content:center;color:var(--branco-gelo);font-size:38px;text-transform:uppercase;letter-spacing:1px}.section-title::before,.section-title::after{content:"";height:1px;width:min(280px,24vw);background:linear-gradient(90deg,transparent,var(--vermelho-fogo),var(--azul-neon),transparent)}.section-title span{color:var(--laranja-energia)}
+
+    .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}.game-card{position:relative;background:linear-gradient(180deg,#151515 0%,#050505 100%);border:1px solid rgba(255,90,0,.15);border-radius:28px;padding:20px;overflow:hidden;box-shadow:0 0 42px rgba(255,42,0,.18),inset 0 0 0 1px rgba(245,245,245,.025);transition:.25s;cursor:pointer}.game-card:hover{transform:translateY(-7px);border-color:rgba(255,90,0,.5);box-shadow:0 0 60px rgba(255,42,0,.28),0 0 18px rgba(0,191,255,.10)}.game-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,42,0,.10),transparent 35%,rgba(0,191,255,.06));pointer-events:none}.game-card::after{content:"";position:absolute;inset:12px;border:1px solid rgba(255,90,0,.18);clip-path:polygon(0 0,90% 0,100% 10%,100% 100%,10% 100%,0 90%);pointer-events:none}.cover{height:340px;display:grid;place-items:center;position:relative}.cover img{max-width:100%;max-height:330px;object-fit:contain;filter:drop-shadow(0 18px 24px rgba(0,0,0,.58)) drop-shadow(0 0 18px rgba(255,90,0,.42))}.game-content{text-align:center;position:relative;z-index:2}.tag{display:inline-block;margin:0 auto 14px;border:1px solid rgba(0,191,255,.45);color:var(--azul-neon);background:rgba(0,59,102,.18);padding:7px 18px;border-radius:10px;font-size:13px;text-transform:uppercase;letter-spacing:.8px}.game-content h3{margin:0;color:var(--branco-gelo);font-size:40px;letter-spacing:1px;text-transform:uppercase}.game-content p{font-family:Inter,system-ui,sans-serif;color:var(--cinza-claro);font-weight:700;line-height:1.45;max-width:390px;margin:12px auto 22px}.play{border:0;background:linear-gradient(90deg,#FF2A00 0%,#FF5A00 50%,#FF8A00 100%);color:#fff;border-radius:14px;padding:18px 34px;font-size:26px;font-weight:1000;letter-spacing:1px;text-transform:uppercase;box-shadow:0 0 26px rgba(255,42,0,.42),inset 0 0 0 1px rgba(245,245,245,.18);cursor:pointer;min-width:270px}.play:hover{background:#FF5A00}
+
+    .ranking-cta{margin:34px 0 28px;border:1px solid rgba(255,90,0,.18);background:linear-gradient(90deg,rgba(21,21,21,.95),rgba(5,5,5,.86));border-radius:22px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:22px;padding:22px 30px;box-shadow:0 0 32px rgba(255,42,0,.13)}.ranking-cta .cup{font-size:50px;color:var(--laranja-dourado);filter:drop-shadow(0 0 12px rgba(255,138,0,.5))}.ranking-cta h3{margin:0;color:var(--branco-gelo);font-size:26px;text-transform:uppercase}.ranking-cta p{font-family:Inter,system-ui,sans-serif;margin:4px 0 0;color:var(--cinza-claro);font-weight:700}.ranking-cta a{border:1px solid rgba(255,90,0,.45);color:var(--branco-gelo);text-decoration:none;text-transform:uppercase;font-weight:1000;padding:14px 28px;border-radius:12px;background:rgba(5,5,5,.7)}
+
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(112,112,112,.26);background:rgba(21,21,21,.72);border-radius:24px;overflow:hidden}.stat{padding:26px 22px;display:flex;gap:14px;align-items:center;border-right:1px solid rgba(112,112,112,.24)}.stat:last-child{border-right:0}.stat i{font-style:normal;font-size:42px;color:var(--azul-neon);filter:drop-shadow(0 0 12px rgba(0,191,255,.4))}.stat strong{display:block;color:var(--laranja-energia);font-size:34px;line-height:1}.stat span{color:var(--branco-gelo);font-size:16px;text-transform:uppercase}.stat small{display:block;color:var(--cinza-claro);font-family:Inter,system-ui,sans-serif;font-size:12px}
+
+    .vip{margin-top:30px;border:1px solid rgba(255,90,0,.18);background:linear-gradient(90deg,rgba(21,21,21,.95),rgba(5,5,5,.9));border-radius:24px;padding:28px;display:grid;grid-template-columns:160px 1fr 260px;gap:22px;align-items:center;box-shadow:0 0 36px rgba(255,42,0,.14)}.vip-badge{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,var(--laranja-dourado),var(--vermelho-fogo));box-shadow:0 0 34px rgba(255,138,0,.42);font-size:38px;color:#050505}.vip h3{margin:0;color:var(--branco-gelo);font-size:34px;text-transform:uppercase}.vip h3 span{color:var(--vermelho-fogo)}.vip p{font-family:Inter,system-ui,sans-serif;color:var(--cinza-claro);font-weight:700;line-height:1.45}.crate{height:140px;border-radius:24px;background:radial-gradient(circle,rgba(255,90,0,.35),transparent 60%);display:grid;place-items:center;font-size:82px;filter:drop-shadow(0 0 18px rgba(255,90,0,.4))}
+
+    footer{margin-top:32px;border-top:1px solid rgba(112,112,112,.28);padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:18px;color:var(--cinza-claro);font-family:Inter,system-ui,sans-serif}.foot-brand{font-family:Impact,"Arial Black";font-size:24px;color:var(--laranja-energia)}.foot-brand span{color:var(--branco-gelo)}.foot-social{display:flex;gap:14px}.foot-social a{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,90,0,.45);display:grid;place-items:center;color:#fff;text-decoration:none;background:#050505}
+
+    @media(max-width:900px){main{width:100%;padding:16px 12px 24px}.topbar{justify-content:center}.brand img{width:260px;max-width:78vw}.status{display:none}.hero{grid-template-columns:1fr;text-align:center}.rocket-art{display:none}.hero h1{font-size:52px}.hero h2{font-size:22px}.features{grid-template-columns:1fr;max-width:none}.feature{border-right:0;border-bottom:1px solid rgba(112,112,112,.25)}.feature:last-child{border-bottom:0}.section-title{font-size:30px;margin-top:26px}.games{grid-template-columns:1fr;gap:18px}.cover{height:260px}.cover img{max-height:250px}.game-content h3{font-size:34px}.play{font-size:22px;width:100%;min-width:0}.ranking-cta{grid-template-columns:1fr;text-align:center}.stats{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat{padding:18px}.vip{grid-template-columns:1fr;text-align:center}.vip-badge{margin:auto}.crate{display:none}footer{flex-direction:column;text-align:center}.client{display:none}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    
+
+    <main id="inicio">
+      <div class="topbar">
+        <div class="brand"><img src="firenet-logo.png" alt="FIRENET Internet Sem Limites"></div>
+        
+      </div>
+
+      <section class="hero"><div style="width:100%;max-width:900px;text-align:center;margin:0 auto;"><h1>FIRENET<br>GAMES</h1><h2>Escolha seu jogo e comece agora</h2><p>Selecione abaixo entre FIRE BLAST e FIRE CRUSH.</p></div></section>
+
+      <h2 class="section-title">Escolha seu <span>jogo</span></h2>
+
+      <section class="games">
+        <article class="game-card" onclick="location.href='https://servicosfire.github.io/jogosfire/fireblast.html'">
+          <div class="cover"><img src="fireblast.png" alt="FIRE BLAST"></div>
+          <div class="game-content">
+            <span class="tag">Ação • Estratégia</span>
+            <h3>Fire Blast</h3>
+            <p>Combine chips, cause explosões e supere os obstáculos das instabilidades concorrentes.</p>
+            <button class="play">Jogar Agora ›</button>
+          </div>
+        </article>
+
+        <article class="game-card" onclick="location.href='https://servicosfire.github.io/jogosfire/firecrush.html'">
+          <div class="cover"><img src="https://i.imgur.com/vSvY2Xv.png" alt="FIRE CRUSH"></div>
+          <div class="game-content">
+            <span class="tag">Puzzle • Combinações</span>
+            <h3>Fire Crush</h3>
+            <p>Faça combinações incríveis, complete metas e alcance a pontuação máxima.</p>
+            <button class="play">Jogar Agora ›</button>
+          </div>
+        </article>
+      </section>
+
+      
+
+      
+
+      
+
+      
+    </main>
+  </div>
+</body>
+</html>
