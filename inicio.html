@@ -133,8 +133,6 @@
       animation:pulseGlow 2.7s ease-in-out infinite;
     }
     .brand img{
-      animation:logoRocket 3s ease-in-out infinite;
-
       width:360px;
       max-width:72vw;
       position:relative;
@@ -144,10 +142,6 @@
     }
 
     @keyframes logoFloat{50%{transform:translateY(-8px) scale(1.025)}}
-    @keyframes logoRocket{
-      0%,100%{transform:translateY(0) rotate(0deg)}
-      50%{transform:translateY(-7px) rotate(-1deg) scale(1.03)}
-    }
     @keyframes pulseGlow{50%{opacity:.48;transform:scale(1.06)}}
 
     .hero{
@@ -158,41 +152,19 @@
       align-items:center;
       text-align:center;
     }
-    .hero-logo-title{
-      margin:18px 0 10px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:2px;
-      line-height:.9;
+    .hero h1{
+      margin:22px 0 6px;
+      font-size:clamp(54px,7vw,104px);
+      line-height:.88;
+      letter-spacing:1px;
       text-transform:uppercase;
+      color:var(--branco-gelo);
+      text-shadow:
+        0 0 18px rgba(245,245,245,.14),
+        0 0 32px rgba(255,42,0,.30),
+        4px 4px 0 rgba(255,42,0,.18);
+      animation:titleBurn 2.4s ease-in-out infinite;
     }
-    .hero-logo-title span{display:block}
-    .fire-word{
-      font-size:clamp(58px,8vw,118px);
-      letter-spacing:2px;
-      background:linear-gradient(180deg,#ffffff 0%,#ffd6c9 18%,#ff8a00 45%,#ff2a00 78%,#781300 100%);
-      -webkit-background-clip:text;
-      color:transparent;
-      text-shadow:0 0 22px rgba(255,90,0,.35);
-      animation:fireGlow 2s ease-in-out infinite;
-    }
-    .games-word{
-      font-size:clamp(42px,6vw,86px);
-      letter-spacing:6px;
-      color:#fff;
-      text-shadow:0 0 18px rgba(255,255,255,.18),0 0 28px rgba(0,191,255,.22);
-      animation:gamesPulse 2.6s ease-in-out infinite;
-    }
-    @keyframes fireGlow{
-      0%,100%{transform:translateY(0);filter:brightness(1)}
-      50%{transform:translateY(-4px);filter:brightness(1.18)}
-    }
-    @keyframes gamesPulse{
-      50%{letter-spacing:9px;filter:brightness(1.2)}
-    }
-
-    .hero h1{margin:0;padding:0;font-size:0;line-height:0;animation:none;}
     .hero h2{
       margin:0;
       color:var(--laranja-energia);
@@ -492,18 +464,6 @@
     .foot-brand span{color:var(--branco-gelo)}
 
     @media(max-width:900px){
-      .topbar{margin-top:4px}
-      .brand img{width:145px !important;max-width:42vw !important}
-      .brand::before{inset:-14px -18px}
-      .hero{margin-top:10px}
-      .hero-logo-title{margin:6px 0 8px !important}
-      .fire-word{font-size:42px !important}
-      .games-word{font-size:28px !important;letter-spacing:4px !important}
-      .hero h2{font-size:18px !important;line-height:1.15;margin-top:0}
-      .hero p{font-size:13px !important;max-width:92%;margin-top:10px}
-      .section-title{font-size:22px !important;gap:8px;margin:22px 0 14px}
-      .section-title::before,.section-title::after{width:58px}
-      .cover{height:245px}
       .app-hint{font-size:12px;padding:9px 12px;margin-top:14px}
       main{width:100%;padding:16px 12px 24px}
       .brand img{width:260px;max-width:78vw}
@@ -552,7 +512,7 @@
 
       <section class="hero">
         <div style="width:100%;max-width:900px;text-align:center;margin:0 auto;">
-          <h1 class="hero-logo-title"><span class="fire-word">FIRENET</span><span class="games-word">GAMES</span></h1>
+          <h1>FIRENET<br>GAMES</h1>
           <h2>Escolha seu jogo e comece agora</h2>
           <p>Selecione abaixo entre FIRE BLAST e FIRE CRUSH.</p>
 
