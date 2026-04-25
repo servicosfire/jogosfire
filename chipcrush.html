@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FIRENET CHIP CRUSH V9</title>
+  <style>
+    :root{--fire:#ff4b00;--gold:#ffb000;--text:#fff7ed;--line:rgba(255,106,0,.42);--bg1:#260700;--bg2:#030305}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030305;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;touch-action:none;user-select:none}
+    body{display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% -10%,rgba(255,128,0,.32),transparent 40%),radial-gradient(circle at 10% 20%,rgba(255,0,0,.16),transparent 30%),linear-gradient(135deg,var(--bg1),var(--bg2) 58%,#141000)}
+    .shell{width:min(96vw,560px);height:min(98dvh,940px);display:flex;flex-direction:column;gap:8px;padding:9px;position:relative}
+    .card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(30,18,10,.86),rgba(5,5,8,.72));box-shadow:0 0 28px rgba(255,82,0,.14),inset 0 0 0 1px rgba(255,255,255,.035);backdrop-filter:blur(10px)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 12px;border-radius:22px}.brand{display:flex;align-items:center;gap:10px}.rocket{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--fire),var(--gold));box-shadow:0 0 22px rgba(255,80,0,.55);font-size:24px}.brand h1{font-size:20px;line-height:1;margin:0;font-weight:1000;background:linear-gradient(90deg,var(--fire),var(--gold) 45%,#fff 76%);-webkit-background-clip:text;color:transparent}.brand span{display:block;font-size:9px;letter-spacing:2.4px;color:#ffc075;margin-top:4px;font-weight:900}.score{text-align:right}.score small{display:block;color:#ffd5a8;font-weight:900;font-size:10px;text-transform:uppercase;letter-spacing:1px}.score b{font-size:25px;color:#ffd15a;text-shadow:0 0 12px rgba(255,200,0,.35)}
+    .info{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border-radius:17px;overflow:hidden}.mini{padding:7px 5px;text-align:center;font-weight:1000;font-size:13px;background:rgba(0,0,0,.24)}.mini small{display:block;font-size:8px;color:#ffbf86;letter-spacing:.9px;text-transform:uppercase;margin-bottom:2px}.mission{padding:8px 10px;border-radius:17px;font-weight:900;font-size:12px;color:#ffe3c0;display:flex;justify-content:space-between;gap:10px}.mission b{color:#ffd15a}
+    .arena{position:relative;flex:1;min-height:0;border-radius:26px;padding:8px;background:linear-gradient(180deg,rgba(255,94,0,.28),rgba(255,188,0,.08));box-shadow:0 0 45px rgba(255,76,0,.20);border:1px solid rgba(255,128,0,.28);overflow:hidden}#game{display:block;width:100%;height:100%;border-radius:19px;background:#060609;box-shadow:inset 0 0 38px rgba(0,0,0,.9),inset 0 0 0 2px var(--fire)}
+    .toast{position:absolute;left:16px;right:16px;top:18px;z-index:8;padding:12px 14px;border-radius:18px;background:rgba(0,0,0,.78);border:1px solid rgba(255,180,0,.5);box-shadow:0 0 26px rgba(255,83,0,.32);font-weight:1000;text-align:center;color:#fff;transform:translateY(-130%);opacity:0;transition:.28s;pointer-events:none}.toast.show{transform:translateY(0);opacity:1}.toast small{display:block;color:#ffd596;font-size:11px;margin-top:3px}
+    .float{position:absolute;top:12px;right:12px;z-index:12;width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,180,0,.55);background:linear-gradient(135deg,rgba(0,0,0,.85),rgba(255,85,0,.45));color:#ffd15a;font-size:22px;font-weight:1000;display:grid;place-items:center;box-shadow:0 0 22px rgba(255,80,0,.35);cursor:pointer}.pause{right:66px}.rules{position:absolute;left:12px;bottom:12px;z-index:9;border:1px solid rgba(255,180,0,.48);background:rgba(0,0,0,.62);color:#ffd15a;padding:9px 11px;border-radius:14px;font-weight:1000;cursor:pointer}
+    .panel{display:none;position:absolute;inset:18px;z-index:22;border:1px solid rgba(255,180,0,.45);border-radius:22px;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);padding:16px;overflow:auto;color:#ffe3c0}.panel.show{display:block}.panel h3{margin:0 0 10px;color:#ffd15a;font-size:22px}.panel p{font-size:13px;line-height:1.45;margin:8px 0}.panel button,.shop button{border:0;border-radius:14px;background:linear-gradient(135deg,var(--fire),var(--gold));font-weight:1000;padding:10px 14px;color:#180800;margin-top:10px}
+    .menu{display:none;position:absolute;top:66px;right:12px;z-index:13;width:180px;padding:10px;border-radius:18px;border:1px solid rgba(255,180,0,.45);background:rgba(0,0,0,.82);backdrop-filter:blur(10px);box-shadow:0 0 28px rgba(255,80,0,.28)}.menu.show{display:grid;gap:8px}.menu button{border:0;border-radius:13px;padding:11px 10px;background:linear-gradient(135deg,var(--fire),var(--gold));font-weight:1000;color:#160800}
+    .shop{display:none;position:absolute;left:9px;right:9px;bottom:18px;z-index:18;border-radius:22px;padding:12px;max-height:65dvh;overflow:auto}.shop.show{display:block}.row{display:flex;justify-content:space-between;align-items:center;padding:8px 9px;border-radius:12px;background:rgba(0,0,0,.28);margin-top:6px;font-weight:900;font-size:13px}
+    .overlay{position:absolute;inset:8px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.78);backdrop-filter:blur(9px);z-index:20;text-align:center;padding:18px}.overlay.hidden{display:none}.modal{max-width:390px}.modal h2{font-size:31px;line-height:1.05;margin:0 0 9px;font-weight:1000;background:linear-gradient(90deg,var(--fire),var(--gold),#fff);-webkit-background-clip:text;color:transparent}.modal p{color:#ffe0bd;margin:0 0 14px;font-size:14px;line-height:1.45}.primary{border:0;border-radius:18px;padding:14px 20px;background:linear-gradient(135deg,var(--fire),var(--gold));color:#120700;font-weight:1000;font-size:15px;box-shadow:0 0 26px rgba(255,82,0,.45)}
+    .hint{text-align:center;color:#ffcca0;font-size:10px;font-weight:800;opacity:.9;margin-top:-2px}
+    @media(max-width:768px),(pointer:coarse){body{align-items:stretch;justify-content:stretch}.shell{width:100vw;height:100dvh;padding:6px;gap:5px}.top{padding:7px 9px;border-radius:18px}.brand h1{font-size:15px}.brand span{font-size:7px}.rocket{width:34px;height:34px;font-size:19px}.score b{font-size:22px}.mini{font-size:11px;padding:5px 3px}.mini small{font-size:7px}.mission{font-size:10px;padding:5px 7px}.arena{flex:1.35;border-radius:20px;padding:5px}.hint{font-size:10px;line-height:1.25;margin:0}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <div class="top card"><div class="brand"><div class="rocket">🚀</div><div><h1>FIRENET CHIP CRUSH</h1><span>COMBO DE INTERNET</span></div></div><div class="score"><small>Pontos</small><b id="score">0</b></div></div>
+  <div class="info card"><div class="mini"><small>Movimentos</small><span id="moves">25</span></div><div class="mini"><small>Nível</small><span id="level">1</span></div><div class="mini"><small>Moedas</small><span id="coins">0</span></div><div class="mini"><small>Meta</small><span id="target">1500</span></div></div>
+  <div class="mission card"><span>🎯 Missão: <b id="mission">Faça pontos combinando chips</b></span><span id="missionProg">0/1500</span></div>
+  <div class="arena">
+    <canvas id="game"></canvas>
+    <div id="toast" class="toast"></div>
+    <button id="pauseBtn" class="float pause">⏸</button><button id="menuBtn" class="float">☰</button>
+    <div id="menu" class="menu"><button data-act="shop">LOJA</button><button data-act="reset">RESET</button><button data-act="rules">REGRAS</button></div>
+    <button id="rulesBtn" class="rules">📜 REGRAS</button>
+    <div id="rulesPanel" class="panel"><h3>📜 Como jogar</h3><p><b>Troque duas peças vizinhas</b> para formar 3 ou mais iguais.</p><p><b>Peças:</b> Chip TIM, Chip CLARO, Chip VIVO e Chip FIRENET.</p><p><b>Dificuldade:</b> níveis altos têm chips travados, torres, vírus e fases BOSS.</p><p><b>FIRENET:</b> peça rara especial. Ao combinar, explode uma área grande.</p><p><b>Combos:</b> quanto maior o nível, menos opções fáceis aparecem no tabuleiro.</p><p><b>VÍRUS:</b> se uma combinação explodir perto dele, tudo fica cinza por algumas rodadas.</p><p><b>Objetivo:</b> bata a meta antes dos movimentos acabarem.</p><button id="closeRules">ENTENDI</button></div>
+    <div id="shop" class="shop card"><div style="display:flex;justify-content:space-between;align-items:center;font-weight:1000;color:#ffd15a">🛒 Loja de Boosts <button id="closeShop">X</button></div><div id="shopList"></div></div>
+    <div id="overlay" class="overlay"><div class="modal"><h2>FIRENET CHIP CRUSH</h2><p>Troque chips, faça combinações, use o poder FIRENET, complete missões, enfrente fases BOSS e ganhe moedas para comprar boosts.</p><button id="startBtn" class="primary">COMEÇAR</button></div></div>
+  </div>
+  <div class="hint">Arraste uma peça para trocar com a vizinha • faça 3+ iguais • FIRENET explode</div>
+</div>
+<script>
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score'),movesEl=document.getElementById('moves'),levelEl=document.getElementById('level'),coinsEl=document.getElementById('coins'),targetEl=document.getElementById('target'),missionEl=document.getElementById('mission'),missionProg=document.getElementById('missionProg');
+const overlay=document.getElementById('overlay'),startBtn=document.getElementById('startBtn'),toast=document.getElementById('toast'),menuBtn=document.getElementById('menuBtn'),menu=document.getElementById('menu'),pauseBtn=document.getElementById('pauseBtn'),rulesBtn=document.getElementById('rulesBtn'),rulesPanel=document.getElementById('rulesPanel'),closeRules=document.getElementById('closeRules'),shop=document.getElementById('shop'),shopList=document.getElementById('shopList'),closeShop=document.getElementById('closeShop');
+const ROWS=8,COLS=8,LS={coins:'firenet_crush_coins',level:'firenet_crush_level'};
+let W=320,H=520,DPR=1,CELL=44,OX=0,OY=0,grid=[],score=0,moves=25,level=1,target=1500,coins=0,paused=false,busy=false,selected=null,particles=[],shockwaves=[],floatTexts=[],animations={},shake=0,combo=0,lastPlayableCheck=0,virusTurns=0,grayTurns=0,currentMoveId=0,grayStartedMove=-1,pendingVirusBlasts=[],mission={type:'points',goal:0,done:0,text:'Faça pontos combinando chips'};
+let audioCtx=null;
+const TYPES={TIM:{name:'TIM',c1:'#0048ff',c2:'#001d86'},CLARO:{name:'CLARO',c1:'#ff1515',c2:'#990000'},VIVO:{name:'VIVO',c1:'#ae2cff',c2:'#550083'},FIRENET:{name:'FIRE',c1:'#ff4b00',c2:'#111',special:true}};
+const KEYS=['TIM','CLARO','VIVO'];
+function unlockAudio(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){}}
+function sfx(type){try{if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);let f=type==='match'?650:type==='fire'?90:type==='bad'?120:type==='virus'?210:360,d=type==='fire'?.28:.09,now=audioCtx.currentTime;o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(40,f*(type==='virus'?.55:1.7)),now+d);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.055,now+.01);g.gain.exponentialRampToValueAtTime(.0001,now+d);o.start(now);o.stop(now+d)}catch(e){}}
+function vib(ms){if(navigator.vibrate)navigator.vibrate(ms)}
+function resize(){const r=canvas.getBoundingClientRect();DPR=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.floor(r.width*DPR);canvas.height=Math.floor(r.height*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);W=r.width;H=r.height;CELL=Math.floor(Math.min(W/COLS,H/ROWS));OX=(W-CELL*COLS)/2;OY=(H-CELL*ROWS)/2}
+function fireRate(){return Math.max(.009,.052-level*.0024)}
+function randBase(){return Math.random()<fireRate()?'FIRENET':KEYS[Math.floor(Math.random()*KEYS.length)]}
+function targetMoveWindow(){
+  // V9: tabuleiro bem mais estratégico desde o nível 1.
+  // Mantém pelo menos 1 movimento possível, mas reduz muito as opções fáceis.
+  const max = level<4 ? 2 : 1;
+  const min = 1;
+  return {min,max};
+}
+function possibleMovesCount(limit=999){
+  let n=0;
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const a={r,c}; if(!isMovable(a))continue;
+    for(const b of [{r:r+1,c},{r,c:c+1}]){
+      if(b.r<0||b.r>=ROWS||b.c<0||b.c>=COLS||!isMovable(b))continue;
+      swap(a,b); const ok=findMatches().length>0; swap(a,b);
+      if(ok&&++n>=limit)return n;
+    }
+  }
+  return n;
+}
+function baseKey(k){return k&&k.startsWith('LOCK_')?k.slice(5):(TYPES[k]?k:null)}
+function isBlocker(k){return k==='TOWER'||k==='VIRUS'}
+function isLocked(k){return k&&k.startsWith('LOCK_')}
+function isMovable(p){const k=grid[p.r]?.[p.c];return !!baseKey(k)&&!isLocked(k)}
+function keyColor(k){const b=baseKey(k);return TYPES[b]?.c1|| (k==='TOWER'?'#ffc24a':k==='VIRUS'?'#39ff88':'#ffd15a')}
+function chooseMission(){
+  if(level%10===0)return{type:'tower',goal:Math.min(10,5+Math.floor(level/4)),done:0,text:'BOSS: destrua torres das operadoras'};
+  const pool=[
+    {type:'points',goal:target,done:0,text:'Faça pontos combinando chips'},
+    {type:'combo',goal:Math.min(8,2+Math.floor(level/4)),done:0,text:'Faça combos e cascatas'},
+    {type:'fire',goal:Math.min(5,1+Math.floor(level/8)),done:0,text:'Ative chips FIRENET'},
+    {type:'lock',goal:Math.min(10,2+Math.floor(level/4)),done:0,text:'Quebre chips travados'},
+    {type:'tower',goal:Math.min(8,1+Math.floor(level/6)),done:0,text:'Derrube torres das operadoras'}
+  ];
+  return pool[level<4?0:level<7?level%3:level%pool.length];
+}
+function createCleanGrid(){let g,guard=0;do{g=Array.from({length:ROWS},()=>Array.from({length:COLS},()=>randBase()));grid=g;guard++}while(findMatches().length&&guard<200);return g}
+function placeObstacles(){
+  const cells=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)cells.push({r,c});cells.sort(()=>Math.random()-.5);
+  let locks=level>=4?Math.min(20,2+Math.floor(level*.72)):0;
+  let towers=level>=8?Math.min(12,1+Math.floor(level/4)):0;
+  let viruses=level>=18?(Math.random()<.012?1:0):0;
+  // V9: vírus quase inexistente. Nem fase BOSS força vírus.
+  if(level%10===0){towers=Math.min(14,8+Math.floor(level/5));locks+=3;viruses=0}
+  for(const p of cells){if(locks<=0)break;const k=grid[p.r][p.c];if(KEYS.includes(k)){grid[p.r][p.c]='LOCK_'+k;locks--}}
+  for(const p of cells){if(towers<=0)break;if(!isBlocker(grid[p.r][p.c])&&!isLocked(grid[p.r][p.c])&&grid[p.r][p.c]!=='FIRENET'){grid[p.r][p.c]='TOWER';towers--}}
+  for(const p of cells){if(viruses<=0)break;if(!isBlocker(grid[p.r][p.c])&&!isLocked(grid[p.r][p.c])&&grid[p.r][p.c]!=='FIRENET'){grid[p.r][p.c]='VIRUS';viruses--}}
+}
+function buildBoard(){
+  let guard=0,best=null,bestMoves=999,win=targetMoveWindow();
+  do{
+    createCleanGrid();placeObstacles();guard++;
+    if(findMatches().length)continue;
+    const mc=possibleMovesCount(win.max+8);
+    if(mc>0&&mc<bestMoves){best=grid.map(row=>row.slice());bestMoves=mc}
+    if(mc>=win.min&&mc<=win.max)return;
+  }while(guard<420);
+  if(best)grid=best;
+  // Segurança: nunca deixa iniciar sem movimento.
+  guard=0;
+  while(!hasPossibleMove()&&guard++<90){createCleanGrid();placeObstacles()}
+}
+function newGame(){level=Number(localStorage.getItem(LS.level)||1);coins=Number(localStorage.getItem(LS.coins)||0);score=0;moves=25+Math.min(10,Math.floor(level/3));target=1500+level*650+Math.floor(Math.pow(level,1.38)*95);mission=chooseMission();if(mission.type==='points')mission.goal=target;virusTurns=0;buildBoard();selected=null;paused=false;busy=false;animations={};showToast(level%10===0?'👑 FASE BOSS':'🔥 Nível '+level,mission.text);updateUI()}
+function missionValue(){return mission.type==='points'?Math.min(score,target):mission.done}
+function updateUI(){scoreEl.textContent=score;movesEl.textContent=moves;levelEl.textContent=level;coinsEl.textContent=coins;targetEl.textContent=target;missionEl.textContent=mission.text;missionProg.textContent=Math.min(missionValue(),mission.goal)+'/'+mission.goal;localStorage.setItem(LS.coins,String(coins))}
+function showToast(t,m=''){toast.innerHTML=t+(m?`<small>${m}</small>`:'');toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),2400)}
+function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function drawBg(){ctx.clearRect(0,0,W,H);let g=ctx.createRadialGradient(W*.5,H*.25,20,W*.5,H*.5,W);g.addColorStop(0,'#3b1200');g.addColorStop(.45,'#09090d');g.addColorStop(1,'#000');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(let i=0;i<45;i++){ctx.globalAlpha=.18;ctx.fillStyle=i%2?'#ff6a00':'#ffd15a';ctx.beginPath();ctx.arc((i*41+performance.now()/30)%W,(i*29)%H,1+(i%3),0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.strokeStyle='rgba(255,76,0,.8)';ctx.lineWidth=3;ctx.strokeRect(OX+2,OY+2,CELL*COLS-4,CELL*ROWS-4)}
+function drawChip(k,x,y,scale=1){
+  const t=TYPES[k];
+  const isFire=k==='FIRENET';
+  const pulse=isFire?1+Math.sin(performance.now()/150)*.045:1;
+  const size=CELL*(isFire?.94:.86)*scale*pulse;
+  const bx=x+CELL/2-size/2,by=y+CELL/2-size/2;
+  if(isFire){
+    // Aura dourada fica ATRÁS do chip, sem pintar o corpo inteiro de amarelo.
+    ctx.save();
+    const aura=ctx.createRadialGradient(x+CELL/2,y+CELL/2,size*.12,x+CELL/2,y+CELL/2,size*.84);
+    aura.addColorStop(0,'rgba(255,210,60,.55)');
+    aura.addColorStop(.46,'rgba(255,95,0,.24)');
+    aura.addColorStop(1,'rgba(255,176,0,0)');
+    ctx.fillStyle=aura;
+    ctx.shadowBlur=32;
+    ctx.shadowColor='#ff7a00';
+    ctx.beginPath();
+    ctx.arc(x+CELL/2,y+CELL/2,size*.88,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=.86+.12*Math.sin(performance.now()/120);
+    ctx.strokeStyle='#ffb000';
+    ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.arc(x+CELL/2,y+CELL/2,size*.67,0,Math.PI*2);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(255,75,0,.78)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.arc(x+CELL/2,y+CELL/2,size*.81,0,Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.shadowBlur=isFire?28:12;
+  ctx.shadowColor=isFire?'#ff4b00':t.c1;
+  let grad=ctx.createLinearGradient(bx,by,bx+size,by+size);
+  if(isFire){
+    // Corpo do chip FIRENET: laranja/preto/dourado apenas nos detalhes.
+    grad.addColorStop(0,'#ff6a00');
+    grad.addColorStop(.38,'#ff2a00');
+    grad.addColorStop(.72,'#2b0800');
+    grad.addColorStop(1,'#070202');
+  }else{
+    grad.addColorStop(0,t.c1);grad.addColorStop(1,t.c2);
+  }
+  ctx.fillStyle=grad;
+  const cut=size*.22;
+  ctx.beginPath();
+  ctx.moveTo(bx+size*.12,by);ctx.lineTo(bx+size-cut,by);ctx.lineTo(bx+size,by+cut);ctx.lineTo(bx+size,by+size*.88);
+  ctx.quadraticCurveTo(bx+size,by+size,bx+size*.88,by+size);ctx.lineTo(bx+size*.12,by+size);
+  ctx.quadraticCurveTo(bx,by+size,bx,by+size*.88);ctx.lineTo(bx,by+size*.12);ctx.quadraticCurveTo(bx,by,bx+size*.12,by);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=isFire?'#ffcf45':'rgba(255,255,255,.55)';ctx.lineWidth=isFire?3:2;ctx.stroke();
+  if(isFire){
+    ctx.save();
+    ctx.shadowBlur=18;ctx.shadowColor='#ff4b00';
+    ctx.strokeStyle='rgba(255,176,0,.9)';ctx.lineWidth=1.4;roundRect(ctx,bx+size*.06,by+size*.06,size*.88,size*.88,12);ctx.stroke();
+    ctx.globalAlpha=.32;ctx.fillStyle='#fff';roundRect(ctx,bx+size*.12,by+size*.10,size*.30,size*.12,5);ctx.fill();
+    ctx.restore();
+  }
+  ctx.shadowBlur=0;
+  ctx.fillStyle=isFire?'#ffd04d':'#f6c552';roundRect(ctx,bx+size*.12,by+size*.12,size*.42,size*.25,4);ctx.fill();
+  if(isFire){ctx.strokeStyle='#2b0800';ctx.lineWidth=1.2;ctx.stroke()}
+  ctx.fillStyle='#fff';ctx.font=`1000 ${size*(k==='CLARO'?.14:isFire?.16:.17)}px Arial Black,Arial`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(t.name,bx+size/2,by+size*.68);
+  if(isFire){
+    ctx.font=`900 ${size*.24}px Arial`;ctx.fillStyle='#ffd15a';ctx.shadowBlur=12;ctx.shadowColor='#ff4b00';ctx.fillText('🔥',bx+size*.76,by+size*.27);
+    ctx.font=`1000 ${size*.115}px Arial Black,Arial`;ctx.fillStyle='#fff4c2';ctx.fillText('ULTRA',bx+size/2,by+size*.86);ctx.shadowBlur=0;
+  }
+}
+function drawPiece(key,x,y,scale=1,alpha=1){if(!key)return;ctx.save();ctx.globalAlpha=alpha;const b=baseKey(key),size=CELL*.86*scale,bx=x+CELL/2-size/2,by=y+CELL/2-size/2;if(b){drawChip(b,x,y,scale);if(isLocked(key)){ctx.shadowBlur=18;ctx.shadowColor='#ffd15a';ctx.strokeStyle='rgba(255,210,80,.95)';ctx.lineWidth=3;roundRect(ctx,bx+4,by+4,size-8,size-8,10);ctx.stroke();ctx.fillStyle='rgba(0,0,0,.42)';roundRect(ctx,bx+6,by+6,size-12,size-12,9);ctx.fill();ctx.font=`900 ${size*.38}px Arial`;ctx.fillStyle='#ffd15a';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🔒',x+CELL/2,y+CELL/2)}}else if(key==='TOWER'){let grad=ctx.createLinearGradient(bx,by,bx,by+size);grad.addColorStop(0,'#ffbf2e');grad.addColorStop(.45,'#7b3300');grad.addColorStop(1,'#120700');ctx.shadowBlur=18;ctx.shadowColor='#ff8a00';ctx.fillStyle=grad;roundRect(ctx,bx,by,size,size,12);ctx.fill();ctx.strokeStyle='#ffd15a';ctx.lineWidth=2;ctx.stroke();ctx.font=`900 ${size*.42}px Arial`;ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('📡',x+CELL/2,y+CELL/2-2);ctx.font=`1000 ${size*.16}px Arial`;ctx.fillStyle='#ffd15a';ctx.fillText('TORRE',x+CELL/2,by+size*.78)}else if(key==='VIRUS'){let pulse=1+Math.sin(performance.now()/120)*.04;ctx.shadowBlur=24;ctx.shadowColor='#39ff88';ctx.fillStyle='rgba(20,255,130,.20)';ctx.beginPath();ctx.arc(x+CELL/2,y+CELL/2,size*.48*pulse,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#39ff88';ctx.lineWidth=3;ctx.stroke();ctx.font=`900 ${size*.45}px Arial`;ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('☠️',x+CELL/2,y+CELL/2-1);ctx.font=`1000 ${size*.13}px Arial`;ctx.fillStyle='#7dffb2';ctx.fillText('VÍRUS',x+CELL/2,by+size*.78)}ctx.restore()}
+function draw(){drawBg();if(shake>0){ctx.save();ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=.84}else ctx.save();if(grayTurns>0)ctx.filter='grayscale(1) contrast(.72) brightness(.82)';const now=performance.now(),skip=new Set();Object.keys(animations).forEach(k=>{const a=animations[k];const t=Math.min(1,(now-a.t0)/a.dur);if(t>=1)delete animations[k];else skip.add(k)});for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const k=r+','+c;if(skip.has(k))continue;let x=OX+c*CELL,y=OY+r*CELL;if(selected&&selected.r===r&&selected.c===c){ctx.strokeStyle='#ffd15a';ctx.lineWidth=4;roundRect(ctx,x+4,y+4,CELL-8,CELL-8,12);ctx.stroke();drawPiece(grid[r][c],x,y,1.08)}else drawPiece(grid[r][c],x,y)}Object.keys(animations).forEach(k=>{const a=animations[k];const [r,c]=k.split(',').map(Number);const t=Math.max(0,Math.min(1,(now-a.t0)/a.dur));const ease=1-Math.pow(1-t,3);const x=OX+(a.fromC+(a.toC-a.fromC)*ease)*CELL;const y=OY+(a.fromR+(a.toR-a.fromR)*ease)*CELL;drawPiece(grid[r][c],x,y,1.05+.07*Math.sin(t*Math.PI))});shockwaves=shockwaves.filter(w=>w.life>0);shockwaves.forEach(w=>{w.life--;ctx.globalAlpha=w.life/w.max*.7;ctx.strokeStyle=w.color;ctx.lineWidth=3;ctx.shadowBlur=20;ctx.shadowColor=w.color;ctx.beginPath();ctx.arc(w.x,w.y,w.r+(w.max-w.life)*5,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0});particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.life--;ctx.globalAlpha=p.life/30;ctx.fillStyle=p.color;ctx.shadowBlur=12;ctx.shadowColor=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0});floatTexts=floatTexts.filter(f=>f.life>0);floatTexts.forEach(f=>{f.y-=.7;f.life--;ctx.globalAlpha=Math.min(1,f.life/20);ctx.fillStyle=f.color;ctx.font='1000 '+Math.max(14,CELL*.34)+'px Arial Black,Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowBlur=16;ctx.shadowColor=f.color;ctx.fillText(f.text,f.x,f.y);ctx.globalAlpha=1;ctx.shadowBlur=0});ctx.restore();ctx.filter='none';if(grayTurns>0){ctx.save();ctx.globalCompositeOperation='saturation';ctx.fillStyle='#8a8a8a';roundRect(ctx,OX,OY,CELL*COLS,CELL*ROWS,16);ctx.fill();ctx.restore();ctx.save();ctx.globalAlpha=.58+.08*Math.sin(performance.now()/90);ctx.fillStyle='#9aa3ad';roundRect(ctx,OX,OY,CELL*COLS,CELL*ROWS,16);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='rgba(240,245,255,.9)';ctx.lineWidth=2;ctx.setLineDash([8,8]);roundRect(ctx,OX+4,OY+4,CELL*COLS-8,CELL*ROWS-8,14);ctx.stroke();ctx.setLineDash([]);ctx.font='1000 '+Math.max(15,CELL*.32)+'px Arial Black,Arial';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillStyle='#ffffff';ctx.shadowBlur=15;ctx.shadowColor='#dfe9ff';ctx.fillText('☠️ VÍRUS CINZA: '+grayTurns+' RODADAS',OX+CELL*COLS/2,OY+8);ctx.restore()}if(!busy&&!paused&&grid.length&&performance.now()-lastPlayableCheck>900){lastPlayableCheck=performance.now();ensurePlayableBoard(true)}requestAnimationFrame(draw)}
+function posFromPoint(x,y){let c=Math.floor((x-OX)/CELL),r=Math.floor((y-OY)/CELL);if(r<0||r>=ROWS||c<0||c>=COLS)return null;return{r,c}}
+function adjacent(a,b){return Math.abs(a.r-b.r)+Math.abs(a.c-b.c)===1}
+function swap(a,b){let t=grid[a.r][a.c];grid[a.r][a.c]=grid[b.r][b.c];grid[b.r][b.c]=t}
+function setAnim(dest,from,dur=190){animations[dest.r+','+dest.c]={fromR:from.r,fromC:from.c,toR:dest.r,toC:dest.c,t0:performance.now(),dur}}
+async function animateSwap(a,b,dur=190){setAnim(a,b,dur);setAnim(b,a,dur);await wait(dur+25)}
+function addShock(c,r,color='#ffb000',power=1){shockwaves.push({x:OX+c*CELL+CELL/2,y:OY+r*CELL+CELL/2,r:CELL*.22,max:18+power*7,life:18+power*7,color})}
+function addFloat(c,r,text,color='#ffd15a'){floatTexts.push({x:OX+c*CELL+CELL/2,y:OY+r*CELL+CELL/2,text,color,life:42})}
+function findMatches(){let rem=new Set();for(let r=0;r<ROWS;r++){let run=[],key=null;for(let c=0;c<COLS;c++){let bk=baseKey(grid[r][c]);if(bk&&bk===key)run.push({r,c});else{if(run.length>=3)run.forEach(p=>rem.add(p.r+','+p.c));run=bk?[{r,c}]:[];key=bk}}if(run.length>=3)run.forEach(p=>rem.add(p.r+','+p.c))}for(let c=0;c<COLS;c++){let run=[],key=null;for(let r=0;r<ROWS;r++){let bk=baseKey(grid[r][c]);if(bk&&bk===key)run.push({r,c});else{if(run.length>=3)run.forEach(p=>rem.add(p.r+','+p.c));run=bk?[{r,c}]:[];key=bk}}if(run.length>=3)run.forEach(p=>rem.add(p.r+','+p.c))}return[...rem].map(s=>{let[a,b]=s.split(',').map(Number);return{r:a,c:b}})}
+function hasPossibleMove(){return possibleMovesCount(1)>0}
+function recreateBoardWithMoves(show=true){let guard=0;do{buildBoard();guard++}while(!hasPossibleMove()&&guard<80);selected=null;grayTurns=0;animations={};for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)animations[r+','+c]={fromR:3.5,fromC:3.5,toR:r,toC:c,t0:performance.now()+((r+c)%4)*18,dur:260+Math.random()*160};if(show){shake=16;showToast('🔄 Sem movimentos','Novo tabuleiro criado automaticamente');sfx('fire');vib(90);for(let i=0;i<44;i++)particles.push({x:OX+CELL*4,y:OY+CELL*4,vx:(Math.random()-.5)*10,vy:(Math.random()-.5)*10,life:28+Math.random()*16,color:i%2?'#ff4b00':'#ffd15a',s:2+Math.random()*4})}updateUI()}
+function ensurePlayableBoard(show=true){if(grid.length&&!hasPossibleMove())recreateBoardWithMoves(show)}
+function spawnParticles(c,r,color,count=12){let x=OX+c*CELL+CELL/2,y=OY+r*CELL+CELL/2;count=Math.min(count,16);if(particles.length>120)particles.splice(0,particles.length-90);for(let i=0;i<count;i++)particles.push({x,y,vx:(Math.random()-.5)*5,vy:(Math.random()-.9)*5,life:18+Math.random()*8,color,s:2+Math.random()*2.5})}
+function incMission(type,n=1){if(mission.type===type){mission.done=Math.min(mission.goal,mission.done+n);updateUI()}}
+function triggerGrayVirus(c,r){
+  // Não aplica a punição no meio da cascata. Primeiro registra,
+  // depois o resolve() aplica tudo quando os combos param.
+  pendingVirusBlasts.push({c,r});
+  addFloat(c,r,'VÍRUS QUEBRADO','#7dffb2');
+  addShock(c,r,'#39ff88',3);
+}
+function applyQueuedVirusPunishments(){
+  if(!pendingVirusBlasts.length)return;
+  const p=pendingVirusBlasts[pendingVirusBlasts.length-1];
+  pendingVirusBlasts=[];
+  grayTurns=Math.max(grayTurns,3+Math.floor(level/18));
+  grayStartedMove=currentMoveId;
+  shake=Math.max(shake,22);
+  addShock(p.c,p.r,'#dfe9ff',5);
+  addFloat(p.c,p.r,'VÍRUS CINZA','#f3f7ff');
+  showToast('☠️ VÍRUS CINZA ATIVADO','Punição aplicada após os combos');
+  sfx('virus');vib(120);
+  for(let i=0;i<34;i++)particles.push({x:OX+p.c*CELL+CELL/2,y:OY+p.r*CELL+CELL/2,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8,life:20+Math.random()*10,color:i%2?'#dfe9ff':'#39ff88',s:2+Math.random()*3});
+}
+function damageAround(cells){let destroyed=0;const seen=new Set();for(const p of cells)for(const d of [[1,0],[-1,0],[0,1],[0,-1]]){const r=p.r+d[0],c=p.c+d[1],id=r+','+c;if(r<0||r>=ROWS||c<0||c>=COLS||seen.has(id))continue;seen.add(id);if(grid[r][c]==='TOWER'||grid[r][c]==='VIRUS'){const k=grid[r][c];spawnParticles(c,r,keyColor(k),k==='VIRUS'?34:24);addShock(c,r,keyColor(k),k==='VIRUS'?4:2);if(k==='TOWER')incMission('tower');if(k==='VIRUS')triggerGrayVirus(c,r);grid[r][c]=null;destroyed++}}return destroyed}
+async function resolve(){busy=true;let total=0;while(true){let matches=findMatches();if(!matches.length)break;combo++;incMission('combo');let extra=[],hadFire=false;matches.forEach(p=>{let key=grid[p.r][p.c];if(baseKey(key)==='FIRENET'){hadFire=true;incMission('fire');for(let rr=p.r-2;rr<=p.r+2;rr++)for(let cc=p.c-2;cc<=p.c+2;cc++)if(rr>=0&&rr<ROWS&&cc>=0&&cc<COLS&&Math.abs(rr-p.r)+Math.abs(cc-p.c)<=3)extra.push({r:rr,c:cc})}});let rawLen=matches.length;matches=matches.concat(extra);let seen=new Set();matches=matches.filter(p=>{let id=p.r+','+p.c;if(seen.has(id))return false;seen.add(id);return true});damageAround(matches);const center=matches[Math.floor(matches.length/2)]||{r:3,c:3};if(rawLen>=4||combo>=2||hadFire){addShock(center.c,center.r,hadFire?'#ff4b00':'#ffd15a',hadFire?3:combo);addFloat(center.c,center.r,hadFire?'FIRENET!':combo>=2?`COMBO x${combo}`:'MEGA COMBO','#ffd15a');shake=Math.max(shake,hadFire?18:8+combo*2);showToast(hadFire?'🚀 EXPLOSÃO FIRENET':combo>=2?`🔥 Combo x${combo}`:'⚡ Mega combinação',`+${matches.length*35*combo} pontos`)}let removed=0;matches.forEach(p=>{let k=grid[p.r][p.c];if(!k)return;spawnParticles(p.c,p.r,keyColor(k),baseKey(k)==='FIRENET'?34:rawLen>=4?18:10);if(isLocked(k)){grid[p.r][p.c]=baseKey(k);incMission('lock');addFloat(p.c,p.r,'DESBLOQUEADO','#ffd15a')}else if(k==='TOWER'){grid[p.r][p.c]=null;incMission('tower');removed++}else if(k==='VIRUS'){triggerGrayVirus(p.c,p.r);grid[p.r][p.c]=null;removed++}else{grid[p.r][p.c]=null;removed++}});let gained=Math.max(1,removed+matches.length)*35*combo;score+=gained;coins+=Math.max(1,Math.floor(matches.length/4));total+=matches.length;sfx(hadFire?'fire':'match');updateUI();await wait(rawLen>=4||hadFire?230:155);applyGravityAnimated();await wait(260)}applyQueuedVirusPunishments();combo=0;if(total)activateVirusPressure();if(total&&missionValue()>=mission.goal){level++;coins+=250+level*25;localStorage.setItem(LS.level,String(level));showToast('🔥 MISSÃO CONCLUÍDA',`Nível ${level} liberado • +${250+level*25} moedas`);newGame();return}if(moves<=0&&missionValue()<mission.goal){showToast('Fim de jogo','Tente novamente para bater a missão!');busy=false;return}ensurePlayableBoard(true);if(total&&grayTurns>0&&grayStartedMove!==currentMoveId){grayTurns--;if(grayTurns===0)showToast('✅ Sinal restaurado','As cores voltaram ao normal')}busy=false;updateUI()}
+function activateVirusPressure(){if(level<14)return;virusTurns++;if(virusTurns<3)return;virusTurns=0;let candidates=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(KEYS.includes(grid[r][c]))candidates.push({r,c});if(!candidates.length)return;const p=candidates[Math.floor(Math.random()*candidates.length)];grid[p.r][p.c]='LOCK_'+grid[p.r][p.c];spawnParticles(p.c,p.r,'#39ff88',22);addShock(p.c,p.r,'#39ff88',2);shake=10;showToast('☠️ Vírus da operadora','Um chip foi travado!');sfx('virus')}
+function randBaseAvoid(g,r,c){
+  const opts=[...KEYS,'FIRENET'].filter(k=>k!=='FIRENET'||Math.random()<fireRate()*1.4).sort(()=>Math.random()-.5);
+  for(const k of opts){
+    const left=c>=2&&baseKey(g[r][c-1])===k&&baseKey(g[r][c-2])===k;
+    const down=r+2<ROWS&&baseKey(g[r+1][c])===k&&baseKey(g[r+2][c])===k;
+    if(!left&&!down)return k;
+  }
+  return KEYS[Math.floor(Math.random()*KEYS.length)];
+}
+function reduceAutoCombosAfterGravity(){
+  // V9: reduz cascatas automáticas exageradas após a queda.
+  // Não mexe no combo inicial do jogador; apenas evita que o tabuleiro se auto-combe demais.
+  let guard=0;
+  while(guard++<24){
+    const m=findMatches();
+    if(m.length<=3 || combo<=1)break;
+    const p=m[Math.floor(Math.random()*m.length)];
+    if(!p || !grid[p.r][p.c] || !baseKey(grid[p.r][p.c]) || baseKey(grid[p.r][p.c])==='FIRENET')break;
+    const old=baseKey(grid[p.r][p.c]);
+    let tries=0;
+    while(tries++<12){
+      const next=KEYS[Math.floor(Math.random()*KEYS.length)];
+      if(next!==old){
+        grid[p.r][p.c]=next;
+        if(findMatches().length<m.length)break;
+      }
+    }
+  }
+}
+function applyGravityAnimated(){let newGrid=Array.from({length:ROWS},()=>Array(COLS).fill(null));animations={};for(let c=0;c<COLS;c++){let write=ROWS-1;for(let r=ROWS-1;r>=0;r--){if(grid[r][c]){newGrid[write][c]=grid[r][c];if(write!==r)animations[write+','+c]={fromR:r,fromC:c,toR:write,toC:c,t0:performance.now(),dur:210};write--}}for(let r=write;r>=0;r--){newGrid[r][c]=randBaseAvoid(newGrid,r,c);animations[r+','+c]={fromR:-1-(write-r),fromC:c,toR:r,toC:c,t0:performance.now(),dur:240}}}grid=newGrid;reduceAutoCombosAfterGravity()}
+function wait(ms){return new Promise(res=>setTimeout(res,ms))}
+async function trySwap(a,b){if(busy||paused)return;if(!adjacent(a,b))return;if(!isMovable(a)||!isMovable(b)){showToast('Peça bloqueada','Quebre travas e torres com combinações ao lado');sfx('bad');return}busy=true;selected=null;swap(a,b);moves--;updateUI();await animateSwap(a,b,180);let m=findMatches();if(!m.length){sfx('bad');vib(40);showToast('Sem combo','Tente formar 3 ou mais iguais');await wait(80);swap(a,b);moves++;updateUI();await animateSwap(a,b,150);busy=false;ensurePlayableBoard(true);return}sfx('match');vib(25);currentMoveId++;busy=false;await resolve()}
+let startPos=null,startXY=null;canvas.addEventListener('pointerdown',e=>{e.preventDefault();unlockAudio();let rect=canvas.getBoundingClientRect();startXY={x:e.clientX-rect.left,y:e.clientY-rect.top};startPos=posFromPoint(startXY.x,startXY.y);selected=startPos});
+canvas.addEventListener('pointermove',e=>{e.preventDefault();if(!startPos||busy||paused)return;let rect=canvas.getBoundingClientRect();let x=e.clientX-rect.left,y=e.clientY-rect.top,dx=x-startXY.x,dy=y-startXY.y;if(Math.max(Math.abs(dx),Math.abs(dy))>CELL*.45){let target={r:startPos.r,c:startPos.c};if(Math.abs(dx)>Math.abs(dy))target.c+=dx>0?1:-1;else target.r+=dy>0?1:-1;if(target.r>=0&&target.r<ROWS&&target.c>=0&&target.c<COLS){const a=startPos;startPos=null;startXY=null;selected=null;trySwap(a,target)}}});
+canvas.addEventListener('pointerup',e=>{e.preventDefault();if(!startPos)return;let rect=canvas.getBoundingClientRect();let end=posFromPoint(e.clientX-rect.left,e.clientY-rect.top);if(!end){selected=null;startPos=null;return}if(end.r===startPos.r&&end.c===startPos.c){selected=end}else{trySwap(startPos,end);selected=null}startPos=null;startXY=null});
+startBtn.onclick=()=>{overlay.classList.add('hidden');newGame();unlockAudio()};pauseBtn.onclick=()=>{paused=!paused;pauseBtn.textContent=paused?'▶':'⏸';showToast(paused?'⏸️ Pausado':'▶️ Continuando')};menuBtn.onclick=()=>menu.classList.toggle('show');menu.addEventListener('click',e=>{let b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='shop')shop.classList.add('show');if(b.dataset.act==='reset')newGame();if(b.dataset.act==='rules')rulesPanel.classList.add('show');menu.classList.remove('show')});rulesBtn.onclick=()=>rulesPanel.classList.add('show');closeRules.onclick=()=>rulesPanel.classList.remove('show');closeShop.onclick=()=>shop.classList.remove('show');
+function renderShop(){shopList.innerHTML=[['+5 movimentos',4500,'moves'],['+1000 pontos',7000,'points'],['Bomba FIRENET no tabuleiro',9500,'fire'],['Limpar 3 bloqueadores',12000,'clear']].map(i=>`<div class="row"><span>${i[0]}<br><small>${i[1]} moedas</small></span><button data-buy="${i[2]}" data-price="${i[1]}">COMPRAR</button></div>`).join('')}
+shopList.addEventListener('click',e=>{let b=e.target.closest('[data-buy]');if(!b)return;let price=+b.dataset.price;if(coins<price){showToast('Moedas insuficientes','Jogue mais para comprar boosts');return}coins-=price;if(b.dataset.buy==='moves')moves+=5;if(b.dataset.buy==='points')score+=1000;if(b.dataset.buy==='fire'){let cells=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(!isBlocker(grid[r][c]))cells.push({r,c});let p=cells[Math.floor(Math.random()*cells.length)];grid[p.r][p.c]='FIRENET'}if(b.dataset.buy==='clear'){let cells=[];for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(isBlocker(grid[r][c])||isLocked(grid[r][c]))cells.push({r,c});cells.sort(()=>Math.random()-.5).slice(0,3).forEach(p=>{spawnParticles(p.c,p.r,keyColor(grid[p.r][p.c]),22);grid[p.r][p.c]=randBase()})}ensurePlayableBoard(false);showToast('Compra feita','Boost aplicado!');updateUI()});
+window.addEventListener('resize',resize);resize();renderShop();newGame();draw();
+})();
+</script>
+</body>
+</html>
